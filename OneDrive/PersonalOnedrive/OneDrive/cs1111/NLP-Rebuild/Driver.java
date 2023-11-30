@@ -37,13 +37,18 @@ class Sentence {
     public void setline(String line) {
         this.line = line;
     }
+
+    @Override
+    public String toString() {
+        return "Timestamp: " + line + " Author: " + author + " Line: " + timestamp;
+    }
 }
 
 class Driver {
     public static void main(String[] args) {
         ArrayList<Sentence> sentences = new ArrayList<>();
-       // String covidFilePath = "OneDrive/PersonalOnedrive/OneDrive/cs1111/NLP-Rebuild/Covid-19_Twitter_Dataset_Apr-Jun_2020_modifiedWITHQUOTES (1).csv";
-        String covidFilePath = "Part2Tester.java";
+        String covidFilePath = "OneDrive/PersonalOnedrive/OneDrive/cs1111/NLP-Rebuild/Covid-19_Twitter_Dataset_Apr-Jun_2020_modifiedWITHQUOTES (1).csv";
+       // String covidFilePath = "Part2Tester.java";
         try {
             FileReader fileReader = new FileReader(covidFilePath);
             BufferedReader buffRead = new BufferedReader(fileReader);
@@ -66,7 +71,8 @@ class Driver {
 
             // Print the extracted sentences
             for (Sentence sentence : sentences) {
-                System.out.println(sentence);
+                //System.out.println("Timestamp: " + sentence.getline() + " Author: " + sentence.getauthor() + " Line: " + sentence.gettimestamp());
+                System.out.println(sentence.toString());
             }
         } catch (Exception exception) {
             System.out.println("Error reading file: " + exception.getMessage());
