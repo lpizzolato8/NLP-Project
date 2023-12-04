@@ -1,5 +1,18 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
+import org.ejml.simple.SimpleMatrix;
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
+import edu.stanford.nlp.sentiment.SentimentCoreAnnotations.SentimentAnnotatedTree;
+import edu.stanford.nlp.trees.Tree;
+import edu.stanford.nlp.util.CoreMap;
+
+
+
 
 class Sentence {
     private String time;
@@ -8,6 +21,18 @@ class Sentence {
     static String[] monthList = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
             "October", "November", "December" };
     static HashMap<String, Integer> printTopWords = new HashMap<>();
+
+    public int getSentiment(Sentence sentence){
+        Properties props = new Properties();
+        props.setProperty("annotators", "tokenize, ssplit, pos, parse, sentiment");
+        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+        Annotation annotation = pipeline.process(sentence.getText());  // operated on getText
+        CoreMap sentence = annotation.get(CoreAnnotations.SentencesAnnotation.class).get(0);
+        Tree tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
+        return RNNCoreAnnotations.getPredictedClass(tree);
+    }
+
+
     String[] stopwords = { "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any",
             "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both",
             "but", "by", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing",
