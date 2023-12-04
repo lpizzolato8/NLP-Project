@@ -54,7 +54,7 @@ class Driver {
                 for (String word : wordsInSentence) {
                     System.out.println(word);
                 }
-
+                
             }
 
             HashMap<String, Integer> topWords = printTopWords(sentences);
@@ -79,10 +79,8 @@ class Driver {
             for (int i = 0; i < results.size() && i < 100; i++) {
                 System.out.println(results.get(i));
             }
-
         } catch (Exception exception) {
             System.out.println("Error reading file: " + exception.getMessage());
         }
     }
-
 }
