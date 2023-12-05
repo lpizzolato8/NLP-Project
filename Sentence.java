@@ -11,8 +11,11 @@ import edu.stanford.nlp.sentiment.SentimentCoreAnnotations.SentimentAnnotatedTre
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.util.CoreMap;
 
-
-
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 class Sentence {
     private String time;
@@ -22,16 +25,15 @@ class Sentence {
             "October", "November", "December" };
     static HashMap<String, Integer> printTopWords = new HashMap<>();
 
-    public int getSentiment(Sentence sentence){
+    public int getSentiment(String tweet) {
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, ssplit, pos, parse, sentiment");
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-        Annotation annotation = pipeline.process(sentence.getText());  // operated on getText
+        Annotation annotation = pipeline.process(tweet); // operated on getText
         CoreMap sentence = annotation.get(CoreAnnotations.SentencesAnnotation.class).get(0);
         Tree tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
         return RNNCoreAnnotations.getPredictedClass(tree);
     }
-
 
     String[] stopwords = { "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any",
             "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both",
@@ -59,6 +61,7 @@ class Sentence {
     public String toString() {
         return "{author:" + author + ", sentence:\"" + text + ", timestamp:\"" + time + "\"}";
     }
+
     public String getText() {
         return text;
     }
@@ -123,7 +126,6 @@ class Sentence {
     }
 
     public static String convertDate(String date) {
-        // Check if date format
         if (date.equals("created_at"))
             return date;
         else if (date.equals(" ")) {
@@ -134,9 +136,22 @@ class Sentence {
         String[] splitDate = temp.split("/");
 
         result += monthList[Integer.parseInt(splitDate[0]) - 1] + " ";
-        result += splitDate[1] + " 20" + splitDate[2]; // assuming data from 21st century
+        result += splitDate[1] + " 20" + splitDate[2];
         return result;
     }
+/*     public boolean keep(String temporalRange) {
+        boolean isWithin = false;
+        try {
+            DateFormat formatter = new SimpleDateFormat("dd/MM");
+            Date date = formatter.parse(time);
+            Timestamp timeStampDate = new Timestamp(date.getTime());
 
-    
+        } catch (Exception e) {
+        }
+
+        if((Split of day > first day && Split of day >= first month)  || (split of day < last day && split of day <= last month) ){
+
+        }
+        return isWithin;
+    } */
 }
