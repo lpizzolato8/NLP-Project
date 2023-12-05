@@ -48,11 +48,11 @@ class Driver {
             }
 
             for (Sentence sentence : sentences) {
-                System.out.println(sentence.toString());
+                System.out.println(sentence.toString() + "\tSentiment Score:" + sentence.getSentiment(sentence.getText()));
 
                 ArrayList<String> wordsInSentence = sentence.splitSentence();
                 for (String word : wordsInSentence) {
-                    System.out.println(word);
+                    //System.out.println(word);
                 }
                 
             }
