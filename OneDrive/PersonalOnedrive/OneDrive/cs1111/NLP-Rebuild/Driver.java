@@ -38,6 +38,16 @@ class Sentence {
         this.line = line;
     }
 
+    public ArrayList<String> splitSentence() {
+        ArrayList<String> wordsList = new ArrayList<>();
+        String[] words = this.timestamp.split("\\s");
+
+        for (String word : words) {
+            wordsList.add(word);
+        }
+        return wordsList;
+    }
+
     @Override
     public String toString() {
         return "Timestamp: " + line + " Author: " + author + " Line: " + timestamp;
@@ -47,8 +57,9 @@ class Sentence {
 class Driver {
     public static void main(String[] args) {
         ArrayList<Sentence> sentences = new ArrayList<>();
-        String covidFilePath = "OneDrive/PersonalOnedrive/OneDrive/cs1111/NLP-Rebuild/Covid-19_Twitter_Dataset_Apr-Jun_2020_modifiedWITHQUOTES (1).csv";
-       // String covidFilePath = "Part2Tester.java";
+        ArrayList<Sentence> words = new ArrayList<>();
+        String covidFilePath = "Covid-19_Twitter_Dataset_Apr-Jun_2020_fixedSpacing.csv";
+        // String covidFilePath = "Part2Tester.java";
         try {
             FileReader fileReader = new FileReader(covidFilePath);
             BufferedReader buffRead = new BufferedReader(fileReader);
@@ -66,36 +77,41 @@ class Driver {
                     // Create a Sentence object and add it to the ArrayList
                     Sentence sentence = new Sentence(timestamp, author, line);
                     sentences.add(sentence);
+
                 }
             }
 
-            // Print the extracted sentences
             for (Sentence sentence : sentences) {
-                //System.out.println("Timestamp: " + sentence.getline() + " Author: " + sentence.getauthor() + " Line: " + sentence.gettimestamp());
                 System.out.println(sentence.toString());
+
+                ArrayList<String> wordsInSentence = sentence.splitSentence();
+                for (String word : wordsInSentence) {
+                    System.out.println(word);
+                }
             }
+
         } catch (Exception exception) {
             System.out.println("Error reading file: " + exception.getMessage());
         }
     }
 
-	public static String[] convertLine(String string) {
+    public static String[] convertLine(String string) {
 
-		String[] result = string.split("\",\"");
+        String[] result = string.split("\",\"");
 
-		String replace = "";
-		for (int i = 1; i < result[0].length(); i++) {
-			replace += result[0].substring(i, i + 1);
-		}
-		result[0] = replace;
+        String replace = "";
+        for (int i = 1; i < result[0].length(); i++) {
+            replace += result[0].substring(i, i + 1);
+        }
+        result[0] = replace;
 
-		replace = "";
-		for (int i = 0; i < result[result.length - 1].length() - 1; i++) {
-			replace += result[result.length - 1].substring(i, i + 1);
-		}
-		result[result.length - 1] = replace;
+        replace = "";
+        for (int i = 0; i < result[result.length - 1].length() - 1; i++) {
+            replace += result[result.length - 1].substring(i, i + 1);
+        }
+        result[result.length - 1] = replace;
 
-		// write the code below, and return the correct result
-		return result;
-	}
+        // write the code below, and return the correct result
+        return result;
+    }
 }
