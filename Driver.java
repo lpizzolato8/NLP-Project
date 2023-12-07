@@ -34,6 +34,7 @@ class Driver {
 
             String currentLine;
             while ((currentLine = buffRead.readLine()) != null) {
+                /* 
                 String[] split = currentLine.split("\",\"");
 
                 if (split.length > 7) {
@@ -45,12 +46,17 @@ class Driver {
                     sentences.add(sentence);
 
                 }
+                */
+                Sentence sentence = Sentence.convertLine(currentLine);
+                sentences.add(sentence);
             }
-
+            
             for (Sentence sentence : sentences) {
                 
+                System.out.println(sentence.toString());
+
                 if (!sentence.getText().equals("")) {
-                    System.out.println(sentence.toString() + "\tSentiment Score:" + sentence.getSentiment(sentence.getText()));
+                    //System.out.println(sentence.toString() + "\tSentiment Score:" + sentence.getSentiment(sentence.getText()));
                 }
                 
 

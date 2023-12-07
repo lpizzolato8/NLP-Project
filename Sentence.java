@@ -142,7 +142,20 @@ class Sentence {
         result += splitDate[1] + " 20" + splitDate[2];
         return result;
     }
-/*     public boolean keep(String temporalRange) {
+
+    public static int convertDateToInt(String date) {
+        String[] split = date.split(" ");
+
+        for (int i = 0; i < monthList.length; i++) {
+            if (split[0] == monthList[i])
+                return i * 100 + Integer.parseInt(split[1]); // e.g. may 23 turns into 523
+                
+        }
+        
+        return 0;
+    }
+    /* 
+    public boolean keep(String temporalRange) { // Format: "Month(str) day(int) year(int)"
         boolean isWithin = false;
         try {
             DateFormat formatter = new SimpleDateFormat("dd/MM");
@@ -155,6 +168,19 @@ class Sentence {
         if((Split of day > first day && Split of day >= first month)  || (split of day < last day && split of day <= last month) ){
 
         }
-        return isWithin;
-    } */
+        
+        return isWithin;   
+    } 
+    */
+
+    public boolean keep(String temporalRange) {
+        String[] split = temporalRange.split("-");
+
+        int minDate = convertDateToInt(split[0]);
+        int maxDate = convertDateToInt(split[1]);
+
+        if (time.)
+
+        return false;
+    }
 }
