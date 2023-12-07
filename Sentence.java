@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Properties;
+
 import org.ejml.simple.SimpleMatrix;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations;
@@ -21,17 +22,19 @@ class Sentence {
     static String[] monthList = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
             "October", "November", "December" };
     static HashMap<String, Integer> printTopWords = new HashMap<>();
-
-    public int getSentiment(Sentence sentence){
+    
+    
+    public int getSentiment(String tweet){
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, ssplit, pos, parse, sentiment");
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-        Annotation annotation = pipeline.process(sentence.getText());  // operated on getText
+        Annotation annotation = pipeline.process(tweet);  // operated on getText
         CoreMap sentence = annotation.get(CoreAnnotations.SentencesAnnotation.class).get(0);
         Tree tree = sentence.get(SentimentCoreAnnotations.SentimentAnnotatedTree.class);
         return RNNCoreAnnotations.getPredictedClass(tree);
     }
 
+    
 
     String[] stopwords = { "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any",
             "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both",
@@ -105,15 +108,14 @@ class Sentence {
 
         String[] split = currentLine.split("\"\"\",\"\"\"");
 
-        // Extracting the three desired pieces
         if (split.length > 7) {
 
             String author = split[4].replaceAll("[^a-zA-Z0-9 ]", "");
             String line = split[7].replaceAll("[^A-Za-z0-9 ]", "");
-            // Converting timestamp date
+            // Convert timestamp date
             String timestamp = convertDate(split[2]);
 
-            // Create a Sentence object and add it to the ArrayList
+            // Create sentence object and add it to ArrayList
             Sentence sentence = new Sentence(line, author, timestamp);
             return sentence;
         }
