@@ -145,10 +145,12 @@ class Sentence {
 
     public static int convertDateToInt(String date) {
         String[] split = date.split(" ");
+        //System.out.println(split[0]);
 
         for (int i = 0; i < monthList.length; i++) {
-            if (split[0] == monthList[i])
-                return i * 100 + Integer.parseInt(split[1]); // e.g. may 23 turns into 523
+            if (monthList[i].equals(split[0]))
+                //System.out.println(("sucess:    " + split[0]));
+                return ((i+1) * 100) + Integer.parseInt(split[1]); // e.g. may 23 turns into 523
                 
         }
         
@@ -178,9 +180,15 @@ class Sentence {
 
         int minDate = convertDateToInt(split[0]);
         int maxDate = convertDateToInt(split[1]);
+        //System.out.println(minDate + " " + maxDate);
+        //System.out.println(maxDate);
 
-        if (time.)
-
-        return false;
+        //System.out.println(getAuthor() + "\t" + getTimestamp() + "\t" + convertDateToInt(time));
+        if (convertDateToInt(time) >= minDate && convertDateToInt(time) <= maxDate) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

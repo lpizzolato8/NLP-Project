@@ -34,30 +34,35 @@ class Driver {
 
             String currentLine;
             while ((currentLine = buffRead.readLine()) != null) {
-                /* 
-                String[] split = currentLine.split("\",\"");
-
-                if (split.length > 7) {
-                    String text = split[7].replaceAll("\"", "").trim();
-                    String author = split[4].replaceAll("\"", "").trim();
-                    String timestamp = split[2].replaceAll("\"", "").trim();
-
-                    Sentence sentence = new Sentence(text, author, timestamp);
-                    sentences.add(sentence);
-
-                }
-                */
                 Sentence sentence = Sentence.convertLine(currentLine);
                 sentences.add(sentence);
             }
             
-            for (Sentence sentence : sentences) {
-                
-                System.out.println(sentence.toString());
+            boolean passedDate = false;
 
-                if (!sentence.getText().equals("")) {
-                    //System.out.println(sentence.toString() + "\tSentiment Score:" + sentence.getSentiment(sentence.getText()));
-                }
+            for (Sentence sentence : sentences) {
+                boolean notLengthOrFirstElementError = sentence.getTimestamp().length() > 1 && !(sentence.getTimestamp().equals("created_at"));
+                if (notLengthOrFirstElementError && sentence.keep("April 19 2020-April 22 2020")) 
+                    System.out.println("REAL " + sentence.getTimestamp() + "\t" + sentence.keep("April 19 2020-April 22 2020"));
+            }
+            /* 
+            for (Sentence sentence : sentences) {
+                System.out.println("m" + sentence.getTimestamp() + "m");
+
+                if (sentence.keep("April 19 2020-April 22 2020")) {
+                    if (!(sentence.getText().equals(" "))) {
+                        System.out.println(sentence.toString() + "\tSentiment Score:" + sentence.getSentiment(sentence.getText()));
+                        passedDate = true;
+                    }
+                }   
+                else {
+                    if (passedDate == true) {
+                        break;
+                    }
+                }                
+
+                //if (!sentence.getText().equals(""))
+                
                 
 
                 ArrayList<String> wordsInSentence = sentence.splitSentence();
@@ -66,6 +71,7 @@ class Driver {
                 }
                 
             }
+            */
 
             HashMap<String, Integer> topWords = printTopWords(sentences);
             Map.Entry<String, Integer> maxEntry = null;
