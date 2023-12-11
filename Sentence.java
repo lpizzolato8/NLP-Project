@@ -22,6 +22,8 @@ class Sentence {
     private String time;
     private String author;
     private String text;
+    private boolean hasTagged;
+
     static String[] monthList = { "January", "February", "March", "April", "May", "June", "July", "August", "September",
             "October", "November", "December" };
     static HashMap<String, Integer> printTopWords = new HashMap<>();
@@ -61,6 +63,14 @@ class Sentence {
         time = timestamp;
     }
 
+    public Sentence(String text, String author, String timestamp, boolean hasTag) {
+        this.text = text;
+        this.author = author;
+        hasTagged = hasTag;
+        time = timestamp;
+        
+    }
+
     @Override
     public String toString() {
         return "{author:" + author + ", sentence:\"" + text + ", timestamp:\"" + time + "\"}";
@@ -88,6 +98,14 @@ class Sentence {
 
     public void setTimestamp(String replaceTime) {
         time = replaceTime;
+    }
+
+    public boolean getTag() {
+        return hasTagged;
+    }
+
+    public void setTag(boolean replaceTagged) {
+        hasTagged = replaceTagged;
     }
 
     public ArrayList<String> splitSentence() {
@@ -127,6 +145,29 @@ class Sentence {
         Sentence sentence1 = new Sentence("ERROR", "ERROR", "ERROR");
         return sentence1;
     }
+
+
+    public static Sentence convertLineTagged(String currentLine) {
+
+        String[] split = currentLine.split("\"\"\",\"\"\"");
+
+        if (split.length > 7) {
+
+            String author = split[4].replaceAll("[^a-zA-Z0-9 ]", "");
+            String line = split[7].replaceAll("[^A-Za-z0-9 ]", "");
+            // Convert timestamp date
+            String timestamp = convertDate(split[2]);
+            boolean hasTag = split[5].length() > 1;
+
+            // Create sentence object and add it to ArrayList
+            Sentence sentence = new Sentence(line, author, timestamp, hasTag);
+            return sentence;
+        }
+
+        Sentence sentence1 = new Sentence("ERROR", "ERROR", "ERROR");
+        return sentence1;
+    }
+
 
     public static String convertDate(String date) {
         if (date.equals("created_at"))
@@ -180,10 +221,7 @@ class Sentence {
 
         int minDate = convertDateToInt(split[0]);
         int maxDate = convertDateToInt(split[1]);
-        //System.out.println(minDate + " " + maxDate);
-        //System.out.println(maxDate);
-
-        //System.out.println(getAuthor() + "\t" + getTimestamp() + "\t" + convertDateToInt(time));
+    
         if (convertDateToInt(time) >= minDate && convertDateToInt(time) <= maxDate) {
             return true;
         }

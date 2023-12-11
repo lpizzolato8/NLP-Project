@@ -28,40 +28,53 @@ class Driver {
         ArrayList<Sentence> sentences = new ArrayList<>();
         ArrayList<Sentence> words = new ArrayList<>();
         String covidFilePath = "Covid-19_Twitter_Dataset_Apr-Jun_2020_fixedSpacing.csv";
+        
         try {
             FileReader fileReader = new FileReader(covidFilePath);
             BufferedReader buffRead = new BufferedReader(fileReader);
 
             String currentLine;
             while ((currentLine = buffRead.readLine()) != null) {
-                Sentence sentence = Sentence.convertLine(currentLine);
+                Sentence sentence = Sentence.convertLineTagged(currentLine);
                 sentences.add(sentence);
             }
             
-            boolean passedDate = false;
+        
+            double totalSentimentTag = 0;
+            double totalSentimentNoTag = 0;
 
+            int tweetCountTag = 0;
+            int tweetCountNoTag = 0;
             for (Sentence sentence : sentences) {
+
                 boolean notLengthOrFirstElementError = sentence.getTimestamp().length() > 1 && !(sentence.getTimestamp().equals("created_at"));
-                if (notLengthOrFirstElementError && sentence.keep("April 19 2020-April 22 2020")) 
-                    System.out.println("REAL " + sentence.getTimestamp() + "\t" + sentence.keep("April 19 2020-April 22 2020"));
-            }
-            /* 
-            for (Sentence sentence : sentences) {
-                System.out.println("m" + sentence.getTimestamp() + "m");
-
-                if (sentence.keep("April 19 2020-April 22 2020")) {
+                
+                if (notLengthOrFirstElementError && sentence.keep("April 19 2020-April 30 2020")) 
+                    
                     if (!(sentence.getText().equals(" "))) {
-                        System.out.println(sentence.toString() + "\tSentiment Score:" + sentence.getSentiment(sentence.getText()));
-                        passedDate = true;
-                    }
-                }   
-                else {
-                    if (passedDate == true) {
-                        break;
-                    }
-                }                
+                        //System.out.println(sentence.toString() + "\tSentiment Score:" + sentence.getSentiment(sentence.getText()));
+                        
+                        int sentiment = sentence.getSentiment(sentence.getText());
 
-                //if (!sentence.getText().equals(""))
+                        System.out.println(sentence.toString() + "\t Has Tag?: " + sentence.getTag() +"\tSentiment Score: " + sentiment);
+
+                        
+                        if (sentence.getTag()) {
+                            totalSentimentTag += sentiment;
+                            tweetCountTag++;
+                        } else {
+                            totalSentimentNoTag += sentiment;
+                            tweetCountNoTag++;
+                        }
+                    }
+                    
+            }
+            System.out.println("Average Sentiment of Posts With User Mentions: " + totalSentimentTag/tweetCountTag + "\nAverage Sentiment of Posts With No User Mentions: " + totalSentimentNoTag/tweetCountNoTag);
+
+
+            /* 
+            for (Sentence sentence : sentences) {          
+
                 
                 
 
